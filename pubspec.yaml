@@ -35,6 +35,23 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+  # Firebase / Firestore for the shared database (houses, rooms, windows, floorspaces)
+  firebase_core: ^4.1.1
+  cloud_firestore: ^6.0.2
+
+  # Pick a room/window/floor photo from the gallery (Photo Gallery mode only, per A4 CRA)
+  image_picker: ^1.1.2
+
+  # Fetch products from the KIT305 product API
+  http: ^1.2.2
+
+  # Number / date formatting for prices and CSV file names
+  intl: ^0.20.2
+
+  # Share the generated quote CSV from the quote screen
+  share_plus: ^12.0.0
+  path_provider: ^2.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
