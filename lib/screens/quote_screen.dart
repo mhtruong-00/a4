@@ -25,6 +25,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   List<RoomQuote> _roomQuotes = [];
   bool _loading = true;
   bool _usingDefaults = false;
+  double _discountPercent = 0;
 
   @override
   void initState() {
@@ -148,6 +149,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   Widget _summaryCard() {
     final subtotal = _calculator.houseSubtotal(_roomQuotes);
+    final discount = _calculator.discountAmount(_roomQuotes, _discountPercent);
+    final total = _calculator.finalTotal(_roomQuotes, _discountPercent);
     return Material(
       elevation: 8,
       child: Padding(
@@ -167,10 +170,50 @@ class _QuoteScreenState extends State<QuoteScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                const Text('Subtotal'),
+                Text(_money(subtotal)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Text('Discount'),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 64,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      hintText: '0',
+                      suffixText: '%',
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _discountPercent =
+                            (double.tryParse(value) ?? 0).clamp(0, 100);
+                      });
+                    },
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  _discountPercent > 0 ? '-${_money(discount)}' : _money(0),
+                  style: TextStyle(
+                    color: _discountPercent > 0 ? Colors.orange : null,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 const Text('FINAL TOTAL',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Text(
-                  _money(subtotal),
+                  _money(total),
                   style: Theme.of(context)
                       .textTheme
                       .headlineSmall
@@ -184,4 +227,6 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
+
 
