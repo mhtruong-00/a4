@@ -45,8 +45,6 @@ dependencies:
   # Fetch products from the KIT305 product API
   http: ^1.2.2
 
-  # Number / date formatting for prices and CSV file names
-  intl: ^0.20.2
 
   # Share the generated quote CSV from the quote screen
   share_plus: ^12.0.0
