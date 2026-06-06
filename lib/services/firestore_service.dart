@@ -124,7 +124,51 @@ class FirestoreService {
   Future<void> deleteFloorSpace(String id) {
     return _floorSpaces.doc(id).delete();
   }
+
+  /// Loads everything the quote screen needs for a house in one go: the rooms,
+  /// and the windows + floor spaces grouped by room id.
+  Future<QuoteData> loadQuoteData(String houseId) async {
+    final roomsSnap = await _rooms.where('houseId', isEqualTo: houseId).get();
+    final rooms = roomsSnap.docs
+        .map((d) => Room.fromMap(d.id, d.data()))
+        .toList()
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
+    final windowsByRoom = <String, List<WindowItem>>{};
+    final floorsByRoom = <String, List<FloorSpace>>{};
+
+    for (final room in rooms) {
+      final wSnap = await _windows.where('roomId', isEqualTo: room.id).get();
+      windowsByRoom[room.id] =
+          wSnap.docs.map((d) => WindowItem.fromMap(d.id, d.data())).toList();
+
+      final fSnap =
+          await _floorSpaces.where('roomId', isEqualTo: room.id).get();
+      floorsByRoom[room.id] =
+          fSnap.docs.map((d) => FloorSpace.fromMap(d.id, d.data())).toList();
+    }
+
+    return QuoteData(
+      rooms: rooms,
+      windowsByRoom: windowsByRoom,
+      floorsByRoom: floorsByRoom,
+    );
+  }
 }
+
+/// Bundle of the data the quote screen loads for a house.
+class QuoteData {
+  final List<Room> rooms;
+  final Map<String, List<WindowItem>> windowsByRoom;
+  final Map<String, List<FloorSpace>> floorsByRoom;
+
+  const QuoteData({
+    required this.rooms,
+    required this.windowsByRoom,
+    required this.floorsByRoom,
+  });
+}
+
 
 
 
