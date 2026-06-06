@@ -110,10 +110,31 @@ class _QuoteScreenState extends State<QuoteScreen> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
+                if (widget.house.notes.trim().isNotEmpty) _notesBanner(),
                 Expanded(child: _buildList()),
                 _summaryCard(),
               ],
             ),
+    );
+  }
+
+  Widget _notesBanner() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Notes', style: Theme.of(context).textTheme.labelLarge),
+          const SizedBox(height: 4),
+          Text(widget.house.notes.trim()),
+        ],
+      ),
     );
   }
 
@@ -299,6 +320,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
 
 
 
