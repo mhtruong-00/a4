@@ -201,12 +201,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
     }
     final items = _filtered;
     if (items.isEmpty) {
+      final searching = _search.trim().isNotEmpty;
       return RefreshIndicator(
         onRefresh: _load,
         child: ListView(
-          children: const [
-            SizedBox(height: 200),
-            Center(child: Text('No products found.')),
+          children: [
+            const SizedBox(height: 160),
+            Center(
+              child: Text(searching
+                  ? 'No products match "$_search".'
+                  : "Couldn't load products. Check your connection."),
+            ),
+            if (!searching) ...[
+              const SizedBox(height: 12),
+              Center(
+                child: OutlinedButton.icon(
+                  onPressed: _load,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Retry'),
+                ),
+              ),
+            ],
           ],
         ),
       );
@@ -274,6 +289,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 }
+
 
 
 
