@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/window_item.dart';
 import '../services/firestore_service.dart';
@@ -193,6 +194,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
                       controller: _widthController,
                       decoration: const InputDecoration(labelText: 'Width (mm)'),
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: _dimensionValidator,
                       onChanged: (_) => setState(() {}),
                     ),
@@ -204,6 +206,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
                       decoration:
                           const InputDecoration(labelText: 'Height (mm)'),
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: _dimensionValidator,
                       onChanged: (_) => setState(() {}),
                     ),
@@ -287,6 +290,9 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     );
   }
 }
+
+
+
 
 
 
