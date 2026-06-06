@@ -17,7 +17,14 @@ class HouseListScreen extends StatefulWidget {
 
 class _HouseListScreenState extends State<HouseListScreen> {
   final FirestoreService _db = FirestoreService();
+  final TextEditingController _searchController = TextEditingController();
   String _search = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   List<House> _filter(List<House> houses) {
     if (_search.trim().isEmpty) return houses;
@@ -87,10 +94,20 @@ class _HouseListScreenState extends State<HouseListScreen> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
+              controller: _searchController,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
                 hintText: 'Search houses',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIcon: _search.isEmpty
+                    ? null
+                    : IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _search = '');
+                        },
+                      ),
               ),
               onChanged: (value) => setState(() => _search = value),
             ),
@@ -160,6 +177,8 @@ class _HouseListScreenState extends State<HouseListScreen> {
     );
   }
 }
+
+
 
 
 
