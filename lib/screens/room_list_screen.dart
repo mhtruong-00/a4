@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/house.dart';
 import '../models/room.dart';
 import '../services/firestore_service.dart';
+import 'quote_screen.dart';
 import 'room_detail_screen.dart';
 import 'room_edit_screen.dart';
 
@@ -49,6 +50,14 @@ class _RoomListScreenState extends State<RoomListScreen> {
     );
   }
 
+  void _openQuote() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => QuoteScreen(house: widget.house),
+      ),
+    );
+  }
+
   Future<bool> _confirmDelete(Room room) async {
     final result = await showDialog<bool>(
       context: context,
@@ -77,6 +86,13 @@ class _RoomListScreenState extends State<RoomListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.house.name.isEmpty ? 'Rooms' : widget.house.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.receipt_long_outlined),
+            tooltip: 'View quote',
+            onPressed: _openQuote,
+          ),
+        ],
       ),
       body: StreamBuilder<List<Room>>(
         stream: _db.roomsStream(widget.house.id),
@@ -149,6 +165,9 @@ class _RoomListScreenState extends State<RoomListScreen> {
     return const Icon(Icons.meeting_room_outlined);
   }
 }
+
+
+
 
 
 
