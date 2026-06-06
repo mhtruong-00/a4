@@ -233,6 +233,17 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
         Text('Product', style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 4),
         Text(_productLabel),
+        if (_productId.isNotEmpty && _panelCount > 1)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(
+              'Needs $_panelCount panels for this width',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: AppColors.windowTint),
+            ),
+          ),
         const SizedBox(height: 8),
         OutlinedButton.icon(
           onPressed: _pickProduct,
@@ -289,6 +300,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     );
   }
 }
+
 
 
 
