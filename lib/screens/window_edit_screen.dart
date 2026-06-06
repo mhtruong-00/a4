@@ -168,13 +168,16 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
       appBar: AppBar(
         title: Text(widget.isEditing ? 'Edit Window' : 'Add Window'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -225,6 +228,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -283,6 +287,8 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     );
   }
 }
+
+
 
 
 
