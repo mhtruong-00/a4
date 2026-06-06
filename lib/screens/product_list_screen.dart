@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/compatibility_checker.dart';
 import '../services/product_api.dart';
+import '../utils/money.dart';
 
 /// What the product picker hands back to the editor: the chosen product, an
 /// optional variant, and the panel count worked out by the compatibility check.
@@ -126,7 +127,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       product.name,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    Text('\$${product.pricePerSqm.toStringAsFixed(2)} / m²'),
+                    Text('${formatMoney(product.pricePerSqm)} / m²'),
                     if (product.description.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 6),
@@ -235,7 +236,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('\$${product.pricePerSqm.toStringAsFixed(2)} / m²'),
+          Text('${formatMoney(product.pricePerSqm)} / m²'),
           if (compat != null && compat.message.isNotEmpty)
             Text(
               compat.message,
@@ -273,6 +274,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 }
+
+
+
 
 
 
