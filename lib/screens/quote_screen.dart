@@ -188,9 +188,18 @@ class _QuoteScreenState extends State<QuoteScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    rq.room.name.isEmpty ? 'Unnamed Room' : rq.room.name,
-                    style: Theme.of(context).textTheme.titleMedium,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        rq.room.name.isEmpty ? 'Unnamed Room' : rq.room.name,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Text(
+                        '${rq.items.length} item${rq.items.length == 1 ? '' : 's'}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
                   ),
                 ),
                 Switch(
@@ -351,6 +360,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
 
 
 
