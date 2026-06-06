@@ -47,6 +47,8 @@ class _HouseEditScreenState extends State<HouseEditScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
 
     final house = (widget.existing ?? const House()).copyWith(
       name: _nameController.text.trim(),
@@ -60,14 +62,11 @@ class _HouseEditScreenState extends State<HouseEditScreen> {
       } else {
         await _db.addHouse(house);
       }
-      if (mounted) Navigator.of(context).pop();
+      navigator.pop();
+      messenger.showSnackBar(const SnackBar(content: Text('House saved')));
     } catch (e) {
-      if (mounted) {
-        setState(() => _saving = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not save: $e')),
-        );
-      }
+      if (mounted) setState(() => _saving = false);
+      messenger.showSnackBar(SnackBar(content: Text('Could not save: $e')));
     }
   }
 
@@ -126,5 +125,6 @@ class _HouseEditScreenState extends State<HouseEditScreen> {
     );
   }
 }
+
 
 
