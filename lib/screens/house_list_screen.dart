@@ -33,6 +33,29 @@ class _HouseListScreenState extends State<HouseListScreen> {
     );
   }
 
+  Future<bool> _confirmDelete(House house) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete house?'),
+        content: Text(
+          'This will remove "${house.name}". This cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,12 +83,24 @@ class _HouseListScreenState extends State<HouseListScreen> {
             itemCount: houses.length,
             itemBuilder: (context, index) {
               final house = houses[index];
-              return ListTile(
-                leading: const Icon(Icons.home_outlined),
-                title: Text(house.name.isEmpty ? '(no name)' : house.name),
-                subtitle: house.address.isEmpty ? null : Text(house.address),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => _editHouse(house),
+              return Dismissible(
+                key: ValueKey(house.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                confirmDismiss: (_) => _confirmDelete(house),
+                onDismissed: (_) => _db.deleteHouse(house.id),
+                child: ListTile(
+                  leading: const Icon(Icons.home_outlined),
+                  title: Text(house.name.isEmpty ? '(no name)' : house.name),
+                  subtitle: house.address.isEmpty ? null : Text(house.address),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => _editHouse(house),
+                ),
               );
             },
           );
@@ -79,6 +114,8 @@ class _HouseListScreenState extends State<HouseListScreen> {
     );
   }
 }
+
+
 
 
 
