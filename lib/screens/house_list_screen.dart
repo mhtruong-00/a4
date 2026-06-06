@@ -25,6 +25,14 @@ class _HouseListScreenState extends State<HouseListScreen> {
     );
   }
 
+  Future<void> _editHouse(House house) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => HouseEditScreen(existing: house),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +64,8 @@ class _HouseListScreenState extends State<HouseListScreen> {
                 leading: const Icon(Icons.home_outlined),
                 title: Text(house.name.isEmpty ? '(no name)' : house.name),
                 subtitle: house.address.isEmpty ? null : Text(house.address),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _editHouse(house),
               );
             },
           );
@@ -69,6 +79,8 @@ class _HouseListScreenState extends State<HouseListScreen> {
     );
   }
 }
+
+
 
 
 
