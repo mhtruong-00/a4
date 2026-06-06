@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
 import 'screens/house_list_screen.dart';
+import 'theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +21,7 @@ class QuotingApp extends StatelessWidget {
     return MaterialApp(
       title: 'Interior Design Quoting',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: buildAppTheme(),
       // House list is the first screen the user sees.
       home: const HouseListScreen(),
     );
