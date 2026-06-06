@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/floor_space.dart';
 import '../services/firestore_service.dart';
@@ -187,6 +188,7 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
                       controller: _widthController,
                       decoration: const InputDecoration(labelText: 'Width (mm)'),
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: _dimensionValidator,
                       onChanged: (_) => setState(() {}),
                     ),
@@ -197,6 +199,7 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
                       controller: _depthController,
                       decoration: const InputDecoration(labelText: 'Depth (mm)'),
                       keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: _dimensionValidator,
                       onChanged: (_) => setState(() {}),
                     ),
@@ -269,6 +272,9 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     );
   }
 }
+
+
+
 
 
 
