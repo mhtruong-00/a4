@@ -150,6 +150,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
               _addWindow,
               'Add Window',
             ),
+            if (windows.isEmpty) _emptyHint('No windows added yet.'),
             for (final window in windows)
               Dismissible(
                 key: ValueKey('w_${window.id}'),
@@ -186,6 +187,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
               _addFloor,
               'Add Floor Space',
             ),
+            if (floors.isEmpty) _emptyHint('No floor spaces added yet.'),
             for (final floor in floors)
               Dismissible(
                 key: ValueKey('f_${floor.id}'),
@@ -227,5 +229,21 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
       child: const Icon(Icons.delete, color: Colors.white),
     );
   }
+
+  Widget _emptyHint(String text) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      child: Text(
+        text,
+        style: Theme.of(context)
+            .textTheme
+            .bodySmall
+            ?.copyWith(color: Theme.of(context).disabledColor),
+      ),
+    );
+  }
 }
+
+
+
 
