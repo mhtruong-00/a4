@@ -73,7 +73,7 @@ class FirestoreService {
   }
 
   /// Duplicates a room along with all of its windows and floor spaces into a new
-  /// "<name> (Copy)" room. Handy when several rooms share the same layout.
+  /// `<name> (Copy)` room. Handy when several rooms share the same layout.
   Future<void> duplicateRoom(Room room) async {
     final newRoomRef = _rooms.doc();
     final copy = room.copyWith(id: newRoomRef.id, name: '${room.name} (Copy)');
@@ -201,6 +201,7 @@ class QuoteData {
     required this.floorsByRoom,
   });
 }
+
 
 
 
