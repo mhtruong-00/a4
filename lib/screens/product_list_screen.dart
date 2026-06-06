@@ -193,7 +193,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       onRefresh: _load,
       child: ListView.separated(
         itemCount: items.length,
-        separatorBuilder: (_, __) => const Divider(height: 1),
+        separatorBuilder: (_, _) => const Divider(height: 1),
         itemBuilder: (context, index) => _productTile(items[index]),
       ),
     );
@@ -242,10 +242,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
         width: 48,
         height: 48,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) =>
+        errorBuilder: (_, _, _) =>
             const Icon(Icons.inventory_2_outlined, size: 40),
       ),
     );
   }
 }
+
+
 
