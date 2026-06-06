@@ -95,9 +95,19 @@ class _QuoteScreenState extends State<QuoteScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              rq.room.name.isEmpty ? 'Unnamed Room' : rq.room.name,
-              style: Theme.of(context).textTheme.titleMedium,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    rq.room.name.isEmpty ? 'Unnamed Room' : rq.room.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                Switch(
+                  value: rq.isIncluded,
+                  onChanged: (value) => setState(() => rq.isIncluded = value),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             for (final item in rq.items)
@@ -128,12 +138,16 @@ class _QuoteScreenState extends State<QuoteScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Items ${_money(rq.subtotal)} + Labour '
-                  '${_money(rq.labour(QuoteCalculator.roomLabour))}',
+                  rq.isIncluded
+                      ? 'Items ${_money(rq.subtotal)} + Labour '
+                          '${_money(rq.labour(QuoteCalculator.roomLabour))}'
+                      : 'Room excluded from quote',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
-                  _money(rq.roomTotal(QuoteCalculator.roomLabour)),
+                  rq.isIncluded
+                      ? _money(rq.roomTotal(QuoteCalculator.roomLabour))
+                      : '-',
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
@@ -227,6 +241,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
+
 
 
 
