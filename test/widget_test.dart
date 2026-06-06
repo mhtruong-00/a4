@@ -107,5 +107,29 @@ void main() {
 
       expect(calc.houseSubtotal(quotes), 0);
     });
+
+    test('discount is clamped to the 0-100 range', () {
+      const rooms = [Room(id: 'r1')];
+      const floors = <String, List<FloorSpace>>{
+        'r1': [
+          FloorSpace(
+            id: 'f1',
+            roomId: 'r1',
+            widthMm: 1000,
+            depthMm: 1000,
+            selectedProductId: 'p2',
+          ),
+        ],
+      };
+      final quotes = calc.buildRoomQuotes(
+        rooms: rooms,
+        windowsByRoom: const {},
+        floorsByRoom: floors,
+        productRates: const {'p2': 100},
+      );
+      // Subtotal is $300. Over-100% clamps to 100% (total 0); negative to 0%.
+      expect(calc.finalTotal(quotes, 150), 0);
+      expect(calc.finalTotal(quotes, -5), 300);
+    });
   });
 }
