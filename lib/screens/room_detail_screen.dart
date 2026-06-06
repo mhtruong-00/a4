@@ -7,6 +7,7 @@ import '../models/house.dart';
 import '../models/room.dart';
 import '../models/window_item.dart';
 import '../services/firestore_service.dart';
+import '../theme.dart';
 import 'floor_space_edit_screen.dart';
 import 'room_edit_screen.dart';
 import 'window_edit_screen.dart';
@@ -119,18 +120,26 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
     );
   }
 
-  Widget _sectionHeader(String title, VoidCallback onAdd, String addLabel) {
+  Widget _sectionHeader(String title, VoidCallback onAdd, String addLabel,
+      Color color) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 8, 4),
       child: Row(
         children: [
           Expanded(
-            child: Text(title, style: Theme.of(context).textTheme.titleMedium),
+            child: Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(color: color, fontWeight: FontWeight.bold),
+            ),
           ),
           TextButton.icon(
             onPressed: onAdd,
             icon: const Icon(Icons.add),
             label: Text(addLabel),
+            style: TextButton.styleFrom(foregroundColor: color),
           ),
         ],
       ),
@@ -149,6 +158,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
               windows.isEmpty ? 'Windows (none)' : 'Windows (${windows.length})',
               _addWindow,
               'Add Window',
+              AppColors.windowTint,
             ),
             if (windows.isEmpty) _emptyHint('No windows added yet.'),
             for (final window in windows)
@@ -159,7 +169,8 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                 confirmDismiss: (_) => _confirmDelete('window'),
                 onDismissed: (_) => _db.deleteWindow(window.id),
                 child: ListTile(
-                  leading: const Icon(Icons.window_outlined),
+                  leading: const Icon(Icons.window_outlined,
+                      color: AppColors.windowTint),
                   title: Text(window.name.isEmpty ? 'Unnamed' : window.name),
                   subtitle: Text(_windowSubtitle(window)),
                   trailing: const Icon(Icons.chevron_right),
@@ -186,6 +197,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                   : 'Floor Spaces (${floors.length})',
               _addFloor,
               'Add Floor Space',
+              AppColors.floorTint,
             ),
             if (floors.isEmpty) _emptyHint('No floor spaces added yet.'),
             for (final floor in floors)
@@ -196,7 +208,8 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                 confirmDismiss: (_) => _confirmDelete('floor space'),
                 onDismissed: (_) => _db.deleteFloorSpace(floor.id),
                 child: ListTile(
-                  leading: const Icon(Icons.grid_on_outlined),
+                  leading: const Icon(Icons.grid_on_outlined,
+                      color: AppColors.floorTint),
                   title: Text(floor.name.isEmpty ? 'Unnamed' : floor.name),
                   subtitle: Text(_floorSubtitle(floor)),
                   trailing: const Icon(Icons.chevron_right),
@@ -243,6 +256,10 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
     );
   }
 }
+
+
+
+
 
 
 
