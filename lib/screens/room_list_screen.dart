@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/house.dart';
 import '../models/room.dart';
 import '../services/firestore_service.dart';
+import 'room_detail_screen.dart';
 import 'room_edit_screen.dart';
 
 /// Shows the rooms that belong to one house. Reached by tapping a house on the
@@ -36,6 +37,14 @@ class _RoomListScreenState extends State<RoomListScreen> {
           houseId: widget.house.id,
           existing: room,
         ),
+      ),
+    );
+  }
+
+  void _openRoom(Room room) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => RoomDetailScreen(house: widget.house, room: room),
       ),
     );
   }
@@ -104,8 +113,12 @@ class _RoomListScreenState extends State<RoomListScreen> {
                 child: ListTile(
                   leading: _thumbnail(room),
                   title: Text(room.name.isEmpty ? '(no name)' : room.name),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => _editRoom(room),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.edit_outlined),
+                    tooltip: 'Edit room',
+                    onPressed: () => _editRoom(room),
+                  ),
+                  onTap: () => _openRoom(room),
                 ),
               );
             },
@@ -136,6 +149,9 @@ class _RoomListScreenState extends State<RoomListScreen> {
     return const Icon(Icons.meeting_room_outlined);
   }
 }
+
+
+
 
 
 
