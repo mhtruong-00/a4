@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/house.dart';
 import '../models/room.dart';
 import '../services/firestore_service.dart';
+import 'room_edit_screen.dart';
 
 /// Shows the rooms that belong to one house. Reached by tapping a house on the
 /// home screen.
@@ -19,6 +20,25 @@ class RoomListScreen extends StatefulWidget {
 
 class _RoomListScreenState extends State<RoomListScreen> {
   final FirestoreService _db = FirestoreService();
+
+  Future<void> _addRoom() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => RoomEditScreen(houseId: widget.house.id),
+      ),
+    );
+  }
+
+  Future<void> _editRoom(Room room) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => RoomEditScreen(
+          houseId: widget.house.id,
+          existing: room,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +71,16 @@ class _RoomListScreenState extends State<RoomListScreen> {
                 leading: _thumbnail(room),
                 title: Text(room.name.isEmpty ? '(no name)' : room.name),
                 trailing: const Icon(Icons.chevron_right),
+                onTap: () => _editRoom(room),
               );
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addRoom,
+        tooltip: 'Add room',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -75,4 +101,7 @@ class _RoomListScreenState extends State<RoomListScreen> {
     return const Icon(Icons.meeting_room_outlined);
   }
 }
+
+
+
 
