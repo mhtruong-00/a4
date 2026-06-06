@@ -118,6 +118,8 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
     final name = _nameController.text.trim();
 
     final floor = (widget.existing ?? FloorSpace(roomId: widget.roomId))
@@ -138,14 +140,11 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
       } else {
         await _db.addFloorSpace(floor);
       }
-      if (mounted) Navigator.of(context).pop();
+      navigator.pop();
+      messenger.showSnackBar(const SnackBar(content: Text('Floor space saved')));
     } catch (e) {
-      if (mounted) {
-        setState(() => _saving = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not save: $e')),
-        );
-      }
+      if (mounted) setState(() => _saving = false);
+      messenger.showSnackBar(SnackBar(content: Text('Could not save: $e')));
     }
   }
 
@@ -272,6 +271,7 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     );
   }
 }
+
 
 
 
