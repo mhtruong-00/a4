@@ -114,6 +114,16 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     }
   }
 
+  void _clearProduct() {
+    setState(() {
+      _productId = '';
+      _productName = '';
+      _variantName = '';
+      _panelCount = 1;
+      _selectedRate = 0;
+    });
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -245,10 +255,21 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
             ),
           ),
         const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: _pickProduct,
-          icon: const Icon(Icons.inventory_2_outlined),
-          label: const Text('Select Window Product'),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _pickProduct,
+                icon: const Icon(Icons.inventory_2_outlined),
+                label: const Text('Select Window Product'),
+              ),
+            ),
+            if (_productId.isNotEmpty)
+              TextButton(
+                onPressed: _clearProduct,
+                child: const Text('Clear'),
+              ),
+          ],
         ),
       ],
     );
@@ -300,6 +321,8 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     );
   }
 }
+
+
 
 
 
