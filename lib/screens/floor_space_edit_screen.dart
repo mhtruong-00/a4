@@ -162,20 +162,23 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
       appBar: AppBar(
         title: Text(widget.isEditing ? 'Edit Floor Space' : 'Add Floor Space'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Floor space name (e.g. Main floor)',
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Floor space name (e.g. Main floor)',
+                  ),
+                  textCapitalization: TextCapitalization.words,
                 ),
-                textCapitalization: TextCapitalization.words,
-              ),
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -218,6 +221,7 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -265,6 +269,8 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     );
   }
 }
+
+
 
 
 
