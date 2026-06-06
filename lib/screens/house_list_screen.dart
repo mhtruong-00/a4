@@ -17,6 +17,17 @@ class HouseListScreen extends StatefulWidget {
 
 class _HouseListScreenState extends State<HouseListScreen> {
   final FirestoreService _db = FirestoreService();
+  String _search = '';
+
+  List<House> _filter(List<House> houses) {
+    if (_search.trim().isEmpty) return houses;
+    final q = _search.toLowerCase();
+    return houses
+        .where((h) =>
+            h.name.toLowerCase().contains(q) ||
+            h.address.toLowerCase().contains(q))
+        .toList();
+  }
 
   Future<void> _addHouse() async {
     await Navigator.of(context).push(
@@ -71,53 +82,75 @@ class _HouseListScreenState extends State<HouseListScreen> {
       appBar: AppBar(
         title: const Text('Houses'),
       ),
-      body: StreamBuilder<List<House>>(
-        stream: _db.housesStream(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: 'Search houses',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) => setState(() => _search = value),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<List<House>>(
+              stream: _db.housesStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                      child: Text('Something went wrong: ${snapshot.error}'));
+                }
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          final houses = snapshot.data!;
-          if (houses.isEmpty) {
-            return const Center(
-              child: Text('No houses yet. Tap + to add one.'),
-            );
-          }
+                final houses = _filter(snapshot.data!);
+                if (houses.isEmpty) {
+                  return Center(
+                    child: Text(_search.trim().isEmpty
+                        ? 'No houses yet. Tap + to add one.'
+                        : 'No houses match "$_search".'),
+                  );
+                }
 
-          return ListView.builder(
-            itemCount: houses.length,
-            itemBuilder: (context, index) {
-              final house = houses[index];
-              return Dismissible(
-                key: ValueKey(house.id),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 16),
-                  child: const Icon(Icons.delete, color: Colors.white),
-                ),
-                confirmDismiss: (_) => _confirmDelete(house),
-                onDismissed: (_) => _db.deleteHouse(house.id),
-                child: ListTile(
-                  leading: const Icon(Icons.home_outlined),
-                  title: Text(house.name.isEmpty ? '(no name)' : house.name),
-                  subtitle: house.address.isEmpty ? null : Text(house.address),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    tooltip: 'Edit house',
-                    onPressed: () => _editHouse(house),
-                  ),
-                  onTap: () => _openRooms(house),
-                ),
-              );
-            },
-          );
-        },
+                return ListView.builder(
+                  itemCount: houses.length,
+                  itemBuilder: (context, index) {
+                    final house = houses[index];
+                    return Dismissible(
+                      key: ValueKey(house.id),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 16),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      confirmDismiss: (_) => _confirmDelete(house),
+                      onDismissed: (_) => _db.deleteHouse(house.id),
+                      child: ListTile(
+                        leading: const Icon(Icons.home_outlined),
+                        title:
+                            Text(house.name.isEmpty ? '(no name)' : house.name),
+                        subtitle:
+                            house.address.isEmpty ? null : Text(house.address),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.edit_outlined),
+                          tooltip: 'Edit house',
+                          onPressed: () => _editHouse(house),
+                        ),
+                        onTap: () => _openRooms(house),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addHouse,
@@ -127,6 +160,8 @@ class _HouseListScreenState extends State<HouseListScreen> {
     );
   }
 }
+
+
 
 
 
