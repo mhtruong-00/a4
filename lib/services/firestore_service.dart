@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/floor_space.dart';
 import '../models/house.dart';
 import '../models/room.dart';
 import '../models/window_item.dart';
@@ -95,7 +96,37 @@ class FirestoreService {
   Future<void> deleteWindow(String id) {
     return _windows.doc(id).delete();
   }
+
+  CollectionReference<Map<String, dynamic>> get _floorSpaces =>
+      _db.collection('floorspaces');
+
+  /// Live list of floor spaces in a room.
+  Stream<List<FloorSpace>> floorSpacesStream(String roomId) {
+    return _floorSpaces
+        .where('roomId', isEqualTo: roomId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => FloorSpace.fromMap(doc.id, doc.data()))
+          .toList();
+    });
+  }
+
+  Future<String> addFloorSpace(FloorSpace floor) async {
+    final ref = await _floorSpaces.add(floor.toMap());
+    return ref.id;
+  }
+
+  Future<void> updateFloorSpace(FloorSpace floor) {
+    return _floorSpaces.doc(floor.id).update(floor.toMap());
+  }
+
+  Future<void> deleteFloorSpace(String id) {
+    return _floorSpaces.doc(id).delete();
+  }
 }
+
+
 
 
 
