@@ -16,6 +16,7 @@ class ImageHelper {
     final XFile? file = await _picker.pickImage(
       source: ImageSource.gallery,
       maxWidth: 1024,
+      maxHeight: 1024,
       imageQuality: 70,
     );
     if (file == null) return null;
@@ -24,4 +25,5 @@ class ImageHelper {
     return base64Encode(bytes);
   }
 }
+
 
