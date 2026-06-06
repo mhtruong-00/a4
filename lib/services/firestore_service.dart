@@ -72,6 +72,30 @@ class FirestoreService {
     return _rooms.doc(id).delete();
   }
 
+  /// Duplicates a room along with all of its windows and floor spaces into a new
+  /// "<name> (Copy)" room. Handy when several rooms share the same layout.
+  Future<void> duplicateRoom(Room room) async {
+    final newRoomRef = _rooms.doc();
+    final copy = room.copyWith(id: newRoomRef.id, name: '${room.name} (Copy)');
+    await newRoomRef.set(copy.toMap());
+
+    final windowSnap =
+        await _windows.where('roomId', isEqualTo: room.id).get();
+    for (final doc in windowSnap.docs) {
+      final data = Map<String, dynamic>.from(doc.data());
+      data['roomId'] = newRoomRef.id;
+      await _windows.add(data);
+    }
+
+    final floorSnap =
+        await _floorSpaces.where('roomId', isEqualTo: room.id).get();
+    for (final doc in floorSnap.docs) {
+      final data = Map<String, dynamic>.from(doc.data());
+      data['roomId'] = newRoomRef.id;
+      await _floorSpaces.add(data);
+    }
+  }
+
   CollectionReference<Map<String, dynamic>> get _windows =>
       _db.collection('windows');
 
@@ -177,6 +201,7 @@ class QuoteData {
     required this.floorsByRoom,
   });
 }
+
 
 
 
