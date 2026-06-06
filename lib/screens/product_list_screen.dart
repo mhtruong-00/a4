@@ -119,9 +119,28 @@ class _ProductListScreenState extends State<ProductListScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(
-                  'Choose a ${product.name} option',
-                  style: Theme.of(context).textTheme.titleMedium,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.name,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text('\$${product.pricePerSqm.toStringAsFixed(2)} / m²'),
+                    if (product.description.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          product.description,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Choose an option:',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ],
                 ),
               ),
               for (final variant in product.variants)
@@ -254,6 +273,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 }
+
 
 
 
