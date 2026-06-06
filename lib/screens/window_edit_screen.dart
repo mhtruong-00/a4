@@ -74,10 +74,13 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
   }
 
   String get _priceLabel {
-    if (_productId.isEmpty || _width <= 0 || _height <= 0) {
+    if (_width <= 0 || _height <= 0) {
       return 'Item price: -';
     }
     final area = (_width / 1000.0) * (_height / 1000.0);
+    if (_productId.isEmpty) {
+      return 'Area: ${area.toStringAsFixed(4)} sqm (pick a product for a price)';
+    }
     final rate =
         _selectedRate > 0 ? _selectedRate : QuoteCalculator.defaultWindowRate;
     final price = rate * area;
@@ -280,6 +283,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     );
   }
 }
+
 
 
 

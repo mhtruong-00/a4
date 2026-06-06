@@ -71,10 +71,13 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
   }
 
   String get _priceLabel {
-    if (_productId.isEmpty || _width <= 0 || _depth <= 0) {
+    if (_width <= 0 || _depth <= 0) {
       return 'Item price: -';
     }
     final area = (_width / 1000.0) * (_depth / 1000.0);
+    if (_productId.isEmpty) {
+      return 'Area: ${area.toStringAsFixed(4)} sqm (pick a product for a price)';
+    }
     final rate =
         _selectedRate > 0 ? _selectedRate : QuoteCalculator.defaultFloorRate;
     final price = rate * area;
@@ -262,6 +265,7 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     );
   }
 }
+
 
 
 
