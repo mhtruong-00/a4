@@ -50,9 +50,12 @@ class FirestoreService {
         .where('houseId', isEqualTo: houseId)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
+      final rooms = snapshot.docs
           .map((doc) => Room.fromMap(doc.id, doc.data()))
           .toList();
+      rooms.sort(
+          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      return rooms;
     });
   }
 
@@ -78,9 +81,12 @@ class FirestoreService {
         .where('roomId', isEqualTo: roomId)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
+      final windows = snapshot.docs
           .map((doc) => WindowItem.fromMap(doc.id, doc.data()))
           .toList();
+      windows.sort(
+          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      return windows;
     });
   }
 
@@ -106,9 +112,12 @@ class FirestoreService {
         .where('roomId', isEqualTo: roomId)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
+      final floors = snapshot.docs
           .map((doc) => FloorSpace.fromMap(doc.id, doc.data()))
           .toList();
+      floors.sort(
+          (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      return floors;
     });
   }
 
@@ -168,6 +177,9 @@ class QuoteData {
     required this.floorsByRoom,
   });
 }
+
+
+
 
 
 
