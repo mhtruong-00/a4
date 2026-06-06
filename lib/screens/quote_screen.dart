@@ -10,6 +10,7 @@ import '../services/firestore_service.dart';
 import '../services/product_api.dart';
 import '../services/quote_calculator.dart';
 import '../theme.dart';
+import '../utils/money.dart';
 
 /// Quote screen for a house. Loads the rooms + windows + floor spaces, fetches
 /// product rates from the API (falling back to default rates if it's offline),
@@ -63,7 +64,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     });
   }
 
-  String _money(double v) => '\$${v.toStringAsFixed(2)}';
+  String _money(double v) => formatMoney(v);
 
   void _setAllRooms(bool included) {
     setState(() {
@@ -360,6 +361,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
+
 
 
 
