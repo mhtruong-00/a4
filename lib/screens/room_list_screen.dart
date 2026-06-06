@@ -40,6 +40,29 @@ class _RoomListScreenState extends State<RoomListScreen> {
     );
   }
 
+  Future<bool> _confirmDelete(Room room) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete room?'),
+        content: Text(
+          'This will remove "${room.name}". This cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +90,23 @@ class _RoomListScreenState extends State<RoomListScreen> {
             itemCount: rooms.length,
             itemBuilder: (context, index) {
               final room = rooms[index];
-              return ListTile(
-                leading: _thumbnail(room),
-                title: Text(room.name.isEmpty ? '(no name)' : room.name),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => _editRoom(room),
+              return Dismissible(
+                key: ValueKey(room.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                confirmDismiss: (_) => _confirmDelete(room),
+                onDismissed: (_) => _db.deleteRoom(room.id),
+                child: ListTile(
+                  leading: _thumbnail(room),
+                  title: Text(room.name.isEmpty ? '(no name)' : room.name),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => _editRoom(room),
+                ),
               );
             },
           );
@@ -101,6 +136,8 @@ class _RoomListScreenState extends State<RoomListScreen> {
     return const Icon(Icons.meeting_room_outlined);
   }
 }
+
+
 
 
 
