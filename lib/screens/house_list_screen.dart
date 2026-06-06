@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/house.dart';
 import '../services/firestore_service.dart';
+import 'house_edit_screen.dart';
 
 /// Home screen: shows every house/customer from Firestore in a live list.
 /// This is the top of the navigation - tapping a house will (later) drill in
@@ -15,6 +16,14 @@ class HouseListScreen extends StatefulWidget {
 
 class _HouseListScreenState extends State<HouseListScreen> {
   final FirestoreService _db = FirestoreService();
+
+  Future<void> _addHouse() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const HouseEditScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +61,15 @@ class _HouseListScreenState extends State<HouseListScreen> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addHouse,
+        tooltip: 'Add house',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
+
+
+
 
