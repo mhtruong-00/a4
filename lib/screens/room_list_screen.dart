@@ -50,6 +50,23 @@ class _RoomListScreenState extends State<RoomListScreen> {
     );
   }
 
+  Future<void> _duplicateRoom(Room room) async {
+    try {
+      await _db.duplicateRoom(room);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Duplicated "${room.name}"')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not duplicate: $e')),
+        );
+      }
+    }
+  }
+
   void _openQuote() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -129,10 +146,19 @@ class _RoomListScreenState extends State<RoomListScreen> {
                 child: ListTile(
                   leading: _thumbnail(room),
                   title: Text(room.name.isEmpty ? '(no name)' : room.name),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    tooltip: 'Edit room',
-                    onPressed: () => _editRoom(room),
+                  trailing: PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'edit') {
+                        _editRoom(room);
+                      } else if (value == 'duplicate') {
+                        _duplicateRoom(room);
+                      }
+                    },
+                    itemBuilder: (context) => const [
+                      PopupMenuItem(value: 'edit', child: Text('Edit')),
+                      PopupMenuItem(
+                          value: 'duplicate', child: Text('Duplicate')),
+                    ],
                   ),
                   onTap: () => _openRoom(room),
                 ),
@@ -165,6 +191,8 @@ class _RoomListScreenState extends State<RoomListScreen> {
     return const Icon(Icons.meeting_room_outlined);
   }
 }
+
+
 
 
 
