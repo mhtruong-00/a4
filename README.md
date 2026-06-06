@@ -90,3 +90,21 @@ then pulls in Products from the API and rolls everything up into a Quote.
 See `THIRD_PARTY_PLUGINS.md` for the list of pub.dev plugins, their authors, and
 where each one is used.
 
+## How the quote is calculated
+
+The quote screen mirrors the maths from my Android/iOS apps:
+
+- Each item's area is `width (m) x height-or-depth (m)`, and its cost is
+  `area x rate`.
+- The rate comes from the product's `price_per_sqm` (looked up from the API by
+  product id). If a product has no rate, or the API is offline, a **default
+  rate** is used: **$50/m² for windows, $100/m² for floors**.
+- A room that has at least one measured, included item adds a **$200 labour**
+  charge.
+- The house **subtotal** is the sum of every included room's items + labour.
+- A whole-house **discount %** is then applied to give the **final total**.
+
+Rooms and individual items can be toggled out of the quote, and the result can
+be shared as a CSV file.
+
+
