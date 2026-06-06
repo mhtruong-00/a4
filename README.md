@@ -74,16 +74,27 @@ then pulls in Products from the API and rolls everything up into a Quote.
   format). Repo: https://github.com/mhtruong-00/kit305-Assignment3-mhtruong-00
 - **Product API** - `https://utasbot.dev/kit305_2026/product` (provided by the
   unit) for the window/floor products and their prices.
-- **GitHub Copilot / ChatGPT** - I used GitHub Copilot inside the editor while
-  porting the app from Swift to Dart. I mainly used it to:
+- **GitHub Copilot** - I used GitHub Copilot inside the editor while porting the
+  app from Swift to Dart. Because Copilot runs as an inline IDE assistant (not a
+  chat transcript), there is no shareable conversation link to provide. I mainly
+  used it to:
   - translate my Swift `QuoteCalculator`, `CompatibilityChecker` and
     `CSVExporter` logic into equivalent Dart,
   - scaffold the boilerplate of the `StatefulWidget` form screens, and
   - write the unit tests in `test/`.
   I reviewed and adjusted everything it suggested so it fit my data model and
-  matched my A3 behaviour.
+  matched my A3 behaviour. I did not use ChatGPT for this assignment.
 - **Stack Overflow** - any small snippets used are cited with the URL in a code
   comment right next to where they're used.
+
+## Running the tests
+
+The business logic (quote maths, product compatibility, JSON parsing and CSV
+export) is covered by unit tests that don't need Firebase:
+
+```bash
+flutter test
+```
 
 ## Third-party plugins
 
