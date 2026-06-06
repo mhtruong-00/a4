@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 import '../models/floor_space.dart';
 import '../services/firestore_service.dart';
-import '../services/image_helper.dart';
 import '../services/quote_calculator.dart';
 import '../theme.dart';
+import '../widgets/photo_field.dart';
 import 'product_list_screen.dart';
 
 /// Add / edit form for a floor space. Like the window editor but uses width x
@@ -28,7 +26,6 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
   static const int _maxMm = 20000;
 
   final FirestoreService _db = FirestoreService();
-  final ImageHelper _imageHelper = ImageHelper();
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _nameController;
@@ -101,13 +98,6 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
       _variantName = selection.variant?.name ?? '';
       _selectedRate = selection.product.pricePerSqm;
     });
-  }
-
-  Future<void> _pickPhoto() async {
-    final base64 = await _imageHelper.pickFromGalleryAsBase64();
-    if (base64 != null) {
-      setState(() => _photoBase64 = base64);
-    }
   }
 
   void _clearProduct() {
@@ -259,50 +249,22 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
 
   Widget _photoSection() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Photo', style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 4),
-        AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: _photoBase64 == null
-                ? const Center(
-                    child: Icon(Icons.image_outlined,
-                        size: 48, color: Colors.grey),
-                  )
-                : Image.memory(base64Decode(_photoBase64!), fit: BoxFit.cover),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: _pickPhoto,
-                icon: const Icon(Icons.photo_library_outlined),
-                label: const Text('Pick from gallery'),
-              ),
-            ),
-            if (_photoBase64 != null) ...[
-              const SizedBox(width: 8),
-              IconButton(
-                tooltip: 'Remove photo',
-                onPressed: () => setState(() => _photoBase64 = null),
-                icon: const Icon(Icons.delete_outline),
-              ),
-            ],
-          ],
+        PhotoField(
+          photoBase64: _photoBase64,
+          onChanged: (value) => setState(() => _photoBase64 = value),
         ),
       ],
     );
   }
 }
+
+
+
+
 
 
 
