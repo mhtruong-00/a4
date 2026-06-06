@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../models/room.dart';
 import '../services/firestore_service.dart';
+import '../services/image_helper.dart';
 
 /// Add / edit form for a room. New rooms need the [houseId] they belong to;
 /// when [existing] is supplied we are editing that room instead.
@@ -19,22 +22,32 @@ class RoomEditScreen extends StatefulWidget {
 
 class _RoomEditScreenState extends State<RoomEditScreen> {
   final FirestoreService _db = FirestoreService();
+  final ImageHelper _imageHelper = ImageHelper();
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _nameController;
 
+  String? _photoBase64;
   bool _saving = false;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.existing?.name ?? '');
+    _photoBase64 = widget.existing?.photoBase64;
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickPhoto() async {
+    final base64 = await _imageHelper.pickFromGalleryAsBase64();
+    if (base64 != null) {
+      setState(() => _photoBase64 = base64);
+    }
   }
 
   Future<void> _save() async {
@@ -45,6 +58,7 @@ class _RoomEditScreenState extends State<RoomEditScreen> {
     final room = (widget.existing ?? Room(houseId: widget.houseId)).copyWith(
       houseId: widget.houseId,
       name: _nameController.text.trim(),
+      photoBase64: _photoBase64 ?? '',
     );
 
     try {
@@ -88,6 +102,8 @@ class _RoomEditScreenState extends State<RoomEditScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
+              _photoSection(),
               const SizedBox(height: 24),
               FilledButton.icon(
                 onPressed: _saving ? null : _save,
@@ -100,5 +116,56 @@ class _RoomEditScreenState extends State<RoomEditScreen> {
       ),
     );
   }
+
+  /// Photo preview + the gallery picker button. Shows a placeholder box until a
+  /// photo is chosen.
+  Widget _photoSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: _photoBase64 == null
+                ? const Center(
+                    child: Icon(Icons.image_outlined,
+                        size: 48, color: Colors.grey),
+                  )
+                : Image.memory(base64Decode(_photoBase64!), fit: BoxFit.cover),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _pickPhoto,
+                icon: const Icon(Icons.photo_library_outlined),
+                label: const Text('Pick from gallery'),
+              ),
+            ),
+            if (_photoBase64 != null) ...[
+              const SizedBox(width: 8),
+              IconButton(
+                tooltip: 'Remove photo',
+                onPressed: () => setState(() => _photoBase64 = null),
+                icon: const Icon(Icons.delete_outline),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
 }
+
+
+
+
+
 
