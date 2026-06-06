@@ -130,5 +130,57 @@ void main() {
       expect(calc.finalTotal(quotes, 150), 0);
       expect(calc.finalTotal(quotes, -5), 300);
     });
+
+    test('no labour is charged when a room has no measured item', () {
+      const rooms = [Room(id: 'r1')];
+      // Window with no dimensions => zero area => not "measured".
+      const windows = <String, List<WindowItem>>{
+        'r1': [WindowItem(id: 'w1', roomId: 'r1', selectedProductId: 'p1')],
+      };
+      final quotes = calc.buildRoomQuotes(
+        rooms: rooms,
+        windowsByRoom: windows,
+        floorsByRoom: const {},
+        productRates: const {'p1': 50},
+      );
+      expect(quotes.single.labour(QuoteCalculator.roomLabour), 0);
+      expect(quotes.single.roomTotal(QuoteCalculator.roomLabour), 0);
+    });
+
+    test('a room can combine a window and a floor', () {
+      const rooms = [Room(id: 'r1')];
+      const windows = <String, List<WindowItem>>{
+        'r1': [
+          WindowItem(
+            id: 'w1',
+            roomId: 'r1',
+            widthMm: 1000,
+            heightMm: 1000,
+            selectedProductId: 'p1',
+          ),
+        ],
+      };
+      const floors = <String, List<FloorSpace>>{
+        'r1': [
+          FloorSpace(
+            id: 'f1',
+            roomId: 'r1',
+            widthMm: 1000,
+            depthMm: 1000,
+            selectedProductId: 'p2',
+          ),
+        ],
+      };
+      final quotes = calc.buildRoomQuotes(
+        rooms: rooms,
+        windowsByRoom: windows,
+        floorsByRoom: floors,
+        productRates: const {'p1': 50, 'p2': 100},
+      );
+      // Window $50 + floor $100 = $150 items, plus $200 labour = $350.
+      expect(quotes.single.items.length, 2);
+      expect(quotes.single.subtotal, 150);
+      expect(quotes.single.roomTotal(QuoteCalculator.roomLabour), 350);
+    });
   });
 }
