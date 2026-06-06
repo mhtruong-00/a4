@@ -110,6 +110,15 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     }
   }
 
+  void _clearProduct() {
+    setState(() {
+      _productId = '';
+      _productName = '';
+      _variantName = '';
+      _selectedRate = 0;
+    });
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -228,10 +237,21 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
         const SizedBox(height: 4),
         Text(_productLabel),
         const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: _pickProduct,
-          icon: const Icon(Icons.inventory_2_outlined),
-          label: const Text('Select Floor Product'),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _pickProduct,
+                icon: const Icon(Icons.inventory_2_outlined),
+                label: const Text('Select Floor Product'),
+              ),
+            ),
+            if (_productId.isNotEmpty)
+              TextButton(
+                onPressed: _clearProduct,
+                child: const Text('Clear'),
+              ),
+          ],
         ),
       ],
     );
@@ -283,6 +303,8 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     );
   }
 }
+
+
 
 
 
