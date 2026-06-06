@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
+import 'screens/house_list_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +24,8 @@ class QuotingApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // Home is replaced with the House list screen once it is built.
-      home: const Scaffold(
-        body: Center(child: Text('Setting up…')),
-      ),
+      // House list is the first screen the user sees.
+      home: const HouseListScreen(),
     );
   }
 }
