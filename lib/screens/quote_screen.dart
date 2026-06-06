@@ -156,6 +156,13 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   children: [
+                    Checkbox(
+                      value: item.isIncluded,
+                      onChanged: rq.isIncluded
+                          ? (value) =>
+                              setState(() => item.isIncluded = value ?? true)
+                          : null,
+                    ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +177,17 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         ],
                       ),
                     ),
-                    Text(_money(item.itemPrice)),
+                    Text(
+                      _money(item.itemPrice),
+                      style: TextStyle(
+                        decoration: (rq.isIncluded && item.isIncluded)
+                            ? null
+                            : TextDecoration.lineThrough,
+                        color: (rq.isIncluded && item.isIncluded)
+                            ? null
+                            : Theme.of(context).disabledColor,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -282,6 +299,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
 
 
 
