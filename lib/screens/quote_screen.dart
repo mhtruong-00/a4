@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../models/house.dart';
+import '../services/csv_exporter.dart';
 import '../services/firestore_service.dart';
 import '../services/product_api.dart';
 import '../services/quote_calculator.dart';
@@ -59,11 +64,47 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   String _money(double v) => '\$${v.toStringAsFixed(2)}';
 
+  /// Builds the CSV, writes it to a temp file and opens the system share sheet.
+  Future<void> _share() async {
+    final csv = CsvExporter().generateCsv(
+      houseName: widget.house.name,
+      address: widget.house.address,
+      roomQuotes: _roomQuotes,
+      discountPercent: _discountPercent,
+      usingDefaults: _usingDefaults,
+      notes: widget.house.notes,
+    );
+
+    final dir = await getTemporaryDirectory();
+    final safeName = widget.house.name.isEmpty
+        ? 'quote'
+        : widget.house.name.replaceAll(' ', '_');
+    final stamp =
+        DateTime.now().toIso8601String().split('.').first.replaceAll(':', '-');
+    final file = File('${dir.path}/quote_${safeName}_$stamp.csv');
+    await file.writeAsString(csv);
+
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path)],
+        subject: 'Quote for ${widget.house.name}',
+        text: 'Quote for ${widget.house.name}',
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quote - ${widget.house.name}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.ios_share),
+            tooltip: 'Share quote CSV',
+            onPressed: (_loading || _roomQuotes.isEmpty) ? null : _share,
+          ),
+        ],
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -241,6 +282,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
+
 
 
 
