@@ -65,6 +65,14 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   String _money(double v) => '\$${v.toStringAsFixed(2)}';
 
+  void _setAllRooms(bool included) {
+    setState(() {
+      for (final rq in _roomQuotes) {
+        rq.isIncluded = included;
+      }
+    });
+  }
+
   /// Builds the CSV, writes it to a temp file and opens the system share sheet.
   Future<void> _share() async {
     final csv = CsvExporter().generateCsv(
@@ -104,6 +112,14 @@ class _QuoteScreenState extends State<QuoteScreen> {
             icon: const Icon(Icons.ios_share),
             tooltip: 'Share quote CSV',
             onPressed: (_loading || _roomQuotes.isEmpty) ? null : _share,
+          ),
+          PopupMenuButton<String>(
+            enabled: !_loading && _roomQuotes.isNotEmpty,
+            onSelected: (value) => _setAllRooms(value == 'all'),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'all', child: Text('Include all rooms')),
+              PopupMenuItem(value: 'none', child: Text('Exclude all rooms')),
+            ],
           ),
         ],
       ),
@@ -335,6 +351,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
+
 
 
 
