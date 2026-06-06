@@ -91,6 +91,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
           category: 'window',
           spaceWidthMm: _width,
           spaceHeightMm: _height,
+          selectedProductId: _productId.isEmpty ? null : _productId,
         ),
       ),
     );
@@ -279,6 +280,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     );
   }
 }
+
 
 
 

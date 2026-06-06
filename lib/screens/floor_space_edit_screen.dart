@@ -88,6 +88,7 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
           category: 'floor',
           spaceWidthMm: _width,
           spaceHeightMm: _depth,
+          selectedProductId: _productId.isEmpty ? null : _productId,
         ),
       ),
     );
@@ -261,6 +262,7 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     );
   }
 }
+
 
 
 
