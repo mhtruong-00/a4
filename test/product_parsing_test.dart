@@ -1,7 +1,6 @@
 // Unit tests for parsing the product API JSON into Product objects.
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:a4kit305/models/product.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Product.fromJson', () {
@@ -53,4 +52,5 @@ void main() {
     });
   });
 }
+
 

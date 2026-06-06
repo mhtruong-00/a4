@@ -1,8 +1,7 @@
 // Unit tests for the window product compatibility rules.
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:a4kit305/models/product.dart';
 import 'package:a4kit305/services/compatibility_checker.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CompatibilityChecker', () {
@@ -87,5 +86,6 @@ void main() {
     });
   });
 }
+
 
 

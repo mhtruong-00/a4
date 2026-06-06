@@ -1,11 +1,10 @@
 // Unit tests for the CSV export. Builds a small quote and checks the CSV has
 // the expected header, item row and totals.
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:a4kit305/models/room.dart';
 import 'package:a4kit305/models/window_item.dart';
 import 'package:a4kit305/services/csv_exporter.dart';
 import 'package:a4kit305/services/quote_calculator.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('CSV has the header, item and totals', () {
@@ -49,4 +48,5 @@ void main() {
     expect(csv.contains('270.00'), isTrue);
   });
 }
+
 

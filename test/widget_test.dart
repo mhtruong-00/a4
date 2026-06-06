@@ -1,12 +1,11 @@
 // Unit tests for the quote calculation logic. These don't touch Firebase or the
 // UI, they just check the maths in QuoteCalculator behaves like the Android/iOS
 // apps (default rates, $200 room labour, and the whole-house discount).
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:a4kit305/models/floor_space.dart';
 import 'package:a4kit305/models/room.dart';
 import 'package:a4kit305/models/window_item.dart';
 import 'package:a4kit305/services/quote_calculator.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final calc = QuoteCalculator();

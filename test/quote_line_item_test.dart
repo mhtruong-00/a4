@@ -1,7 +1,6 @@
 // Unit tests for the QuoteLineItem helpers (area, price and labels).
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:a4kit305/models/quote_line_item.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('QuoteLineItem', () {
@@ -34,4 +33,5 @@ void main() {
     });
   });
 }
+
 
