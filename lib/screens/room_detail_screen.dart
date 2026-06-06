@@ -224,8 +224,9 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
 
   String _windowSubtitle(WindowItem w) {
     final dims = '${w.widthMm}W x ${w.heightMm}H mm';
-    if (w.selectedProductName.isEmpty) return dims;
-    return '$dims · ${w.selectedProductName}';
+    final panels = w.panelCount > 1 ? ' · ${w.panelCount} panels' : '';
+    if (w.selectedProductName.isEmpty) return '$dims$panels';
+    return '$dims · ${w.selectedProductName}$panels';
   }
 
   String _floorSubtitle(FloorSpace f) {
@@ -256,6 +257,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
     );
   }
 }
+
 
 
 
