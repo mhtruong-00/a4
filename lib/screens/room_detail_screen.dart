@@ -106,15 +106,39 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
   }
 
   Widget _roomPhoto() {
+    final bytes = base64Decode(widget.room.photoBase64!);
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.memory(
-          base64Decode(widget.room.photoBase64!),
-          height: 160,
-          width: double.infinity,
-          fit: BoxFit.cover,
+      child: GestureDetector(
+        onTap: () => _viewPhoto(bytes),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.memory(
+            bytes,
+            height: 160,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _viewPhoto(Uint8List bytes) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.black,
+        insetPadding: const EdgeInsets.all(12),
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            InteractiveViewer(child: Image.memory(bytes)),
+            IconButton(
+              icon: const Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
         ),
       ),
     );
@@ -257,6 +281,7 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
     );
   }
 }
+
 
 
 
