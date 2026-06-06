@@ -123,6 +123,8 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
     final name = _nameController.text.trim();
 
     final window = (widget.existing ?? WindowItem(roomId: widget.roomId))
@@ -144,14 +146,11 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
       } else {
         await _db.addWindow(window);
       }
-      if (mounted) Navigator.of(context).pop();
+      navigator.pop();
+      messenger.showSnackBar(const SnackBar(content: Text('Window saved')));
     } catch (e) {
-      if (mounted) {
-        setState(() => _saving = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not save: $e')),
-        );
-      }
+      if (mounted) setState(() => _saving = false);
+      messenger.showSnackBar(SnackBar(content: Text('Could not save: $e')));
     }
   }
 
@@ -290,6 +289,7 @@ class _WindowEditScreenState extends State<WindowEditScreen> {
     );
   }
 }
+
 
 
 
