@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/house.dart';
 import '../models/room.dart';
+import '../models/window_item.dart';
 
 /// Small wrapper around Cloud Firestore so my screens don't have to talk to
 /// Firestore directly. I started with just the houses collection and will add
@@ -66,7 +67,37 @@ class FirestoreService {
   Future<void> deleteRoom(String id) {
     return _rooms.doc(id).delete();
   }
+
+  CollectionReference<Map<String, dynamic>> get _windows =>
+      _db.collection('windows');
+
+  /// Live list of windows in a room.
+  Stream<List<WindowItem>> windowsStream(String roomId) {
+    return _windows
+        .where('roomId', isEqualTo: roomId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => WindowItem.fromMap(doc.id, doc.data()))
+          .toList();
+    });
+  }
+
+  Future<String> addWindow(WindowItem window) async {
+    final ref = await _windows.add(window.toMap());
+    return ref.id;
+  }
+
+  Future<void> updateWindow(WindowItem window) {
+    return _windows.doc(window.id).update(window.toMap());
+  }
+
+  Future<void> deleteWindow(String id) {
+    return _windows.doc(id).delete();
+  }
 }
+
+
 
 
 
