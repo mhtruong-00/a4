@@ -9,6 +9,7 @@ import '../services/csv_exporter.dart';
 import '../services/firestore_service.dart';
 import '../services/product_api.dart';
 import '../services/quote_calculator.dart';
+import '../theme.dart';
 
 /// Quote screen for a house. Loads the rooms + windows + floor spaces, fetches
 /// product rates from the API (falling back to default rates if it's offline),
@@ -227,10 +228,10 @@ class _QuoteScreenState extends State<QuoteScreen> {
                   rq.isIncluded
                       ? _money(rq.roomTotal(QuoteCalculator.roomLabour))
                       : '-',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: rq.isIncluded ? AppColors.quoteTint : null,
+                      ),
                 ),
               ],
             ),
@@ -304,13 +305,16 @@ class _QuoteScreenState extends State<QuoteScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text('FINAL TOTAL',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.quoteTint,
+                    )),
                 Text(
                   _money(total),
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.quoteTint,
+                      ),
                 ),
               ],
             ),
@@ -320,6 +324,9 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
+
+
 
 
 
