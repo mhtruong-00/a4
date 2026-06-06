@@ -44,6 +44,8 @@ class _RoomEditScreenState extends State<RoomEditScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
 
     final room = (widget.existing ?? Room(houseId: widget.houseId)).copyWith(
       houseId: widget.houseId,
@@ -57,14 +59,11 @@ class _RoomEditScreenState extends State<RoomEditScreen> {
       } else {
         await _db.addRoom(room);
       }
-      if (mounted) Navigator.of(context).pop();
+      navigator.pop();
+      messenger.showSnackBar(const SnackBar(content: Text('Room saved')));
     } catch (e) {
-      if (mounted) {
-        setState(() => _saving = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not save: $e')),
-        );
-      }
+      if (mounted) setState(() => _saving = false);
+      messenger.showSnackBar(SnackBar(content: Text('Could not save: $e')));
     }
   }
 
@@ -114,6 +113,7 @@ class _RoomEditScreenState extends State<RoomEditScreen> {
     );
   }
 }
+
 
 
 
