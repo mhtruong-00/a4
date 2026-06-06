@@ -6,6 +6,7 @@ import '../models/floor_space.dart';
 import '../services/firestore_service.dart';
 import '../services/image_helper.dart';
 import '../services/quote_calculator.dart';
+import '../theme.dart';
 import 'product_list_screen.dart';
 
 /// Add / edit form for a floor space. Like the window editor but uses width x
@@ -208,6 +209,9 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
                 onPressed: _saving ? null : _save,
                 icon: const Icon(Icons.save),
                 label: Text(_saving ? 'Saving…' : 'Save Floor Space'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.floorTint,
+                ),
               ),
             ],
           ),
@@ -279,4 +283,6 @@ class _FloorSpaceEditScreenState extends State<FloorSpaceEditScreen> {
     );
   }
 }
+
+
 
