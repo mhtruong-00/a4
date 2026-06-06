@@ -11,10 +11,9 @@ model is shared across all three submissions.
 
 ## Which device/simulator to test with
 
-Please test on the **iOS Simulator** (this is what I developed and tested on):
+Please test on the **Web Chrome** (this is what I developed and tested on):
 
-- Device: iPhone 15 (or any recent iPhone), iOS 17+
-- The bundled `lib/firebase_options.dart` uses the real iOS config from my
+- Device: Web Chrome
   Firebase project (`test-minh-tute-5`), so Firestore works out of the box on iOS.
 - The **Photo Gallery** picker is the photo mode implemented (per the A4 CRA
   note about the camera not working on the simulator). The iOS Simulator ships
