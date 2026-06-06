@@ -141,12 +141,23 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   Widget _buildList() {
     if (_roomQuotes.isEmpty) {
-      return const Center(child: Text('No rooms in this house yet.'));
+      return RefreshIndicator(
+        onRefresh: _load,
+        child: ListView(
+          children: const [
+            SizedBox(height: 200),
+            Center(child: Text('No rooms in this house yet.')),
+          ],
+        ),
+      );
     }
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: _roomQuotes.length,
-      itemBuilder: (context, index) => _roomCard(_roomQuotes[index]),
+    return RefreshIndicator(
+      onRefresh: _load,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: _roomQuotes.length,
+        itemBuilder: (context, index) => _roomCard(_roomQuotes[index]),
+      ),
     );
   }
 
@@ -324,6 +335,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     );
   }
 }
+
 
 
 
