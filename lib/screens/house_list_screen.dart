@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../models/house.dart';
 import '../services/firestore_service.dart';
 import 'house_edit_screen.dart';
+import 'room_list_screen.dart';
 
 /// Home screen: shows every house/customer from Firestore in a live list.
-/// This is the top of the navigation - tapping a house will (later) drill in
-/// to its rooms.
+/// This is the top of the navigation - tapping a house drills in to its rooms,
+/// and the edit button opens the house form.
 class HouseListScreen extends StatefulWidget {
   const HouseListScreen({super.key});
 
@@ -29,6 +30,14 @@ class _HouseListScreenState extends State<HouseListScreen> {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => HouseEditScreen(existing: house),
+      ),
+    );
+  }
+
+  void _openRooms(House house) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => RoomListScreen(house: house),
       ),
     );
   }
@@ -98,8 +107,12 @@ class _HouseListScreenState extends State<HouseListScreen> {
                   leading: const Icon(Icons.home_outlined),
                   title: Text(house.name.isEmpty ? '(no name)' : house.name),
                   subtitle: house.address.isEmpty ? null : Text(house.address),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => _editHouse(house),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.edit_outlined),
+                    tooltip: 'Edit house',
+                    onPressed: () => _editHouse(house),
+                  ),
+                  onTap: () => _openRooms(house),
                 ),
               );
             },
@@ -114,6 +127,10 @@ class _HouseListScreenState extends State<HouseListScreen> {
     );
   }
 }
+
+
+
+
 
 
 
