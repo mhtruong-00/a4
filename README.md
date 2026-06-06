@@ -11,24 +11,47 @@ model is shared across all three submissions.
 
 ## Which device/simulator to test with
 
-Please test on the **Web Chrome** (this is what I developed and tested on):
+### Recommended platform (used during development)
 
-- Device: Web Chrome
-  Firebase project (`test-minh-tute-5`), so Firestore works out of the box on iOS.
-- The **Photo Gallery** picker is the photo mode implemented (per the A4 CRA
-  note about the camera not working on the simulator). The iOS Simulator ships
-  with sample photos you can use to test this.
+Please test on **Web Chrome**, as this is the platform I primarily developed and tested on.
 
 To run:
 
 ```bash
 flutter pub get
-flutter run            # with an iOS Simulator already booted
+flutter run -d chrome
 ```
 
-> Note: the Android `appId` in `firebase_options.dart` is a placeholder. If you'd
-> rather test on Android, run `flutterfire configure` against your own Firebase
-> project first, otherwise Firestore won't connect on Android.
+### iOS Simulator
+
+The app also supports the iOS Simulator. Firebase is configured using the provided
+Firebase project (`test-minh-tute-5`), so Firestore works without additional setup.
+
+To run on iOS:
+
+```bash
+flutter pub get
+flutter run
+```
+
+(with an iOS Simulator already booted)
+
+The app uses the **Photo Gallery** picker rather than the camera (per the A4 CRA
+note regarding simulator camera limitations). The iOS Simulator includes sample
+photos that can be used for testing image selection.
+
+### Android
+
+The Android `appId` in `firebase_options.dart` is intentionally a placeholder.
+If you wish to run the application on Android, first configure Firebase for your
+own project:
+
+```bash
+flutterfire configure
+```
+
+Without reconfiguring Firebase, Firestore connectivity will not work on Android.
+
 
 ## Screens and how they fit together
 
@@ -83,8 +106,6 @@ then pulls in Products from the API and rolls everything up into a Quote.
   - write the unit tests in `test/`.
   I reviewed and adjusted everything it suggested so it fit my data model and
   matched my A3 behaviour. I did not use ChatGPT for this assignment.
-- **Stack Overflow** - any small snippets used are cited with the URL in a code
-  comment right next to where they're used.
 
 ## Running the tests
 
