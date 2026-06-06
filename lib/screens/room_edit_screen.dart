@@ -74,42 +74,47 @@ class _RoomEditScreenState extends State<RoomEditScreen> {
       appBar: AppBar(
         title: Text(widget.isEditing ? 'Edit Room' : 'Add Room'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Room name'),
-                textCapitalization: TextCapitalization.words,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              PhotoField(
-                photoBase64: _photoBase64,
-                onChanged: (value) => setState(() => _photoBase64 = value),
-              ),
-              const SizedBox(height: 24),
-              FilledButton.icon(
-                onPressed: _saving ? null : _save,
-                icon: const Icon(Icons.save),
-                label: Text(_saving ? 'Saving…' : 'Save'),
-              ),
-            ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Room name'),
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                PhotoField(
+                  photoBase64: _photoBase64,
+                  onChanged: (value) => setState(() => _photoBase64 = value),
+                ),
+                const SizedBox(height: 24),
+                FilledButton.icon(
+                  onPressed: _saving ? null : _save,
+                  icon: const Icon(Icons.save),
+                  label: Text(_saving ? 'Saving…' : 'Save'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+
 
 
 
