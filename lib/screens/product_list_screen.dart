@@ -27,11 +27,13 @@ class ProductListScreen extends StatefulWidget {
     required this.category,
     this.spaceWidthMm = 0,
     this.spaceHeightMm = 0,
+    this.selectedProductId,
   });
 
   final String category;
   final int spaceWidthMm;
   final int spaceHeightMm;
+  final String? selectedProductId;
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
@@ -205,8 +207,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
             product, widget.spaceWidthMm, widget.spaceHeightMm)
         : null;
     final incompatible = compat != null && !compat.compatible;
+    final isSelected = product.id == widget.selectedProductId;
 
     return ListTile(
+      selected: isSelected,
       leading: _productImage(product),
       title: Text(product.name),
       subtitle: Column(
@@ -225,7 +229,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ),
       trailing: incompatible
           ? const Icon(Icons.block, color: Colors.red)
-          : const Icon(Icons.chevron_right),
+          : isSelected
+              ? const Icon(Icons.check_circle, color: Colors.green)
+              : const Icon(Icons.chevron_right),
       onTap: () => _selectProduct(product),
     );
   }
@@ -248,6 +254,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 }
+
+
 
 
 
