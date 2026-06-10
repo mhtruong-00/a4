@@ -9,6 +9,8 @@ It reads and writes the **same Firestore database** as my Assignment 2/3 apps
 (top-level `houses`, `rooms`, `windows`, `floorspaces` collections), so the data
 model is shared across all three submissions.
 
+## All the files were completed with support from coipilot
+
 ## Which device/simulator to test with
 
 ### Recommended platform (used during development)
